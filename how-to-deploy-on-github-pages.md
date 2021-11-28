@@ -10,5 +10,5 @@ git push -u origin main\
 vite.config.ts -> base: _/project-name/_\
 npm run build\
 git add dist -f\
-git commit -, "adding dist"\
+git commit -m "adding dist"\
 git subtree push --prefix dist origin gh-pages\

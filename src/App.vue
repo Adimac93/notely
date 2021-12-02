@@ -3,35 +3,53 @@
   <main>
     <div class="grid justify-items-center justify-center mx-10">
       <div v-if="!isLoggedIn" class="password-box">
-        <div v-if="password" class="inline-flex">
-          Password yes
-          <label>Enter your password</label>
-          <input type="password" v-model="password1" />
-          <button @click="checkPassword(password1)">Log in</button>
+        <div v-if="password" class="inline-flex bg-gray-100 rounded-md m-5">
+          <label class="m-2">Enter your password to register</label>
+          <input
+            class="border-2 rounded-md m-2"
+            type="password"
+            v-model="password1"
+            @keyup.enter="checkPassword(password1)"
+          />
+          <button class="m-2" @click="checkPassword(password1)">Register</button>
         </div>
-        <div v-else class="inline-flex">
-          Password no
-          <label>Enter your password</label>
-          <input v-model="password1" type="password" placeholder="Enter your password..." />
-          <input v-model="password2" type="password" placeholder="Repeat your password..." />
-          <button @click="savePassword(password1, matchPasswords(password1, password2))">Log in</button>
+        <div v-else class="inline-flex bg-gray-100 rounded-md">
+          <label class="m-2">Enter your password to log in</label>
+          <input
+            class="border-2 rounded-md m-2"
+            v-model="password1"
+            type="password"
+            placeholder="Enter your password..."
+            @keyup.enter="checkPassword(password1)"
+          />
+          <input
+            class="border-2 rounded-md m-2"
+            v-model="password2"
+            type="password"
+            placeholder="Repeat your password..."
+            @keyup.enter="checkPassword(password1)"
+          />
+          <button
+            class="m-2"
+            @click="savePassword(password1, matchPasswords(password1, password2))"
+          >Log in</button>
         </div>
       </div>
       <div v-else class="note-box grid justify-items-center justify-center mx-10">
-        <label class="font-bold pt-5">Notes</label>
+        <label class="font-bold pt-5 font">Notes</label>
         <br />
         <input
           v-model="title"
           placeholder="Title..."
           type="text"
-          class="note-content p-2 border-2 rounded-md"
+          class="note-content p-2 border-2 rounded-md shadow-sm"
           @focus="playSound('mouse_click.mp3')"
         />
         <br />
         <textarea
           v-model="text"
           placeholder="Place for your note ↴"
-          class="p-2 border-2 rounded-md"
+          class="p-2 border-2 rounded-md shadow-sm"
           rows="5"
           cols="50"
           @focus="playSound('mouse_click.mp3')"
@@ -40,15 +58,15 @@
         <div class="inline-flex">
           <button
             v-if="text.length <= maxChars"
-            class="note-save p-1 w-20 rounded-md bg-gray-100 hover:bg-gray-200 active:bg-gray-100 rounded-r-none"
+            class="note-save shadow-md p-1 w-20 rounded-md bg-gray-100 hover:bg-gray-200 active:bg-gray-100 rounded-r-none"
             @click="saveNote(), playSound('mouse_click.mp3')"
           >Save</button>
           <button
             v-else
-            class="note-save p-1 w-20 bg-gray-100 rounded-md opacity-70 rounded-r-none"
+            class="note-save shadow-md p-1 w-20 bg-gray-100 rounded-md opacity-70 rounded-r-none"
           >Save</button>
           <button
-            class="note-save p-1 w-20 rounded-md bg-gray-100 hover:bg-gray-200 active:bg-gray-100 rounded-l-none"
+            class="note-save shadow-md p-1 w-20 rounded-md bg-gray-100 hover:bg-gray-200 active:bg-gray-100 rounded-l-none"
             @click="clearFields(), playSound('mouse_click.mp3')"
           >Clear</button>
         </div>

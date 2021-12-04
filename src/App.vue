@@ -10,8 +10,12 @@
             type="password"
             v-model="password1"
             @keyup.enter="checkPassword(password1)"
+            @focus="playSound('mouse_click.mp3')"
           />
-          <button class="m-2" @click="checkPassword(password1)">Register</button>
+          <button
+            class="m-2"
+            @click="checkPassword(password1), playSound('mouse_click.mp3')"
+          >Register</button>
         </div>
         <div v-else class="inline-flex bg-gray-100 rounded-md">
           <label class="m-2">Enter your password to log in</label>
@@ -21,6 +25,7 @@
             type="password"
             placeholder="Enter your password..."
             @keyup.enter="checkPassword(password1)"
+            @focus="playSound('mouse_click.mp3')"
           />
           <input
             class="border-2 rounded-md m-2"
@@ -28,10 +33,11 @@
             type="password"
             placeholder="Repeat your password..."
             @keyup.enter="checkPassword(password1)"
+            @focus="playSound('mouse_click.mp3')"
           />
           <button
             class="m-2"
-            @click="savePassword(password1, matchPasswords(password1, password2))"
+            @click="savePassword(password1, matchPasswords(password1, password2)), playSound('mouse_click.mp3')"
           >Log in</button>
         </div>
       </div>
@@ -73,7 +79,7 @@
 
         <br />
         <ul class="note-view items-center cursor-pointer">
-          <li
+          <!-- <li
             class="note text-center break-words max-w-6xl hover:bg-gray-100 active:bg-gray-200 rounded-md"
             v-for="(note, index) in notes"
             :key="note.title"
@@ -82,7 +88,14 @@
           >
             <a class="font-bold">{{ note.title }}</a>
             - {{ note.text }}
-          </li>
+          </li>-->
+          <NoteDisplay
+            v-for="(note, index) in notes"
+            :key="note.title"
+            :noteTitle="note.title"
+            :noteText="note.text"
+            @isDelete="delNote(index)"
+          ></NoteDisplay>
         </ul>
       </div>
     </div>
@@ -91,9 +104,12 @@
 
 <script lang="ts">
 import { defineComponent } from '@vue/runtime-core'
+import NoteDisplay from './components/NoteDisplay.vue';
 import { Note } from './Note'
 export default defineComponent({
-
+  components: {
+    NoteDisplay
+  },
   name: "app",
   data() {
     return {
@@ -102,7 +118,7 @@ export default defineComponent({
       notes: <Note[]>JSON.parse(localStorage.getItem('notes') ?? '[]'),
 
 
-      maxChars: <number>1000,
+      maxChars: <number>10000,
       currentChars: <number>0,
 
 
@@ -143,11 +159,11 @@ export default defineComponent({
       const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('')
       console.log(hashHex)
       if (hashHex == localStorage.getItem('password')) {
-        console.log('Matching!')
+        console.log('Matching password!')
         this.isLoggedIn = true
       }
       else {
-        console.log('Wrong!')
+        console.log('Wrong password!')
         this.isLoggedIn = false
       }
 
@@ -155,7 +171,7 @@ export default defineComponent({
     playSound(sound: string) {
       if (sound) {
         var audio = new Audio(sound);
-        audio.volume = 0.05;
+        audio.volume = 0.08;
         audio.play();
       }
 
@@ -186,7 +202,8 @@ export default defineComponent({
   },
   checkPassword(password: string) {
 
-  }
+  },
+
 
 
 });

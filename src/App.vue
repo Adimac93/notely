@@ -1,26 +1,29 @@
 <template>
   <header></header>
-  <main>
+  <main class="dark:bg-gray-900 min-h-screen">
     <div class="grid justify-items-center justify-center mx-10">
-      <div v-if="!isLoggedIn" class="password-box">
-        <div v-if="password" class="inline-flex bg-gray-100 rounded-md m-5">
-          <label class="m-2">Enter your password to register</label>
+      <div v-if="!isLoggedIn" class="justify-center items-center flex password-box h-screen">
+        <div
+          v-if="password"
+          class="dark:bg-gray-800 dark:text-gray-100 inline-flex bg-gray-100 rounded-md m-5"
+        >
+          <label class="m-2">Enter your password to log in</label>
           <input
-            class="border-2 rounded-md m-2"
+            class="dark:bg-gray-700 border-2 rounded-md m-2"
             type="password"
             v-model="password1"
             @keyup.enter="checkPassword(password1)"
             @focus="playSound('mouse_click.mp3')"
           />
-          <button
-            class="m-2"
-            @click="checkPassword(password1), playSound('mouse_click.mp3')"
-          >Register</button>
+          <button class="m-2" @click="checkPassword(password1), playSound('mouse_click.mp3')">Log in</button>
         </div>
-        <div v-else class="inline-flex bg-gray-100 rounded-md">
-          <label class="m-2">Enter your password to log in</label>
+        <div
+          v-else
+          class="justify-center items-center inline-flex dark:bg-gray-800 dark:text-gray-100 bg-gray-100 rounded-md"
+        >
+          <label class="m-2">Enter your password to register</label>
           <input
-            class="border-2 rounded-md m-2"
+            class="dark:bg-gray-700 border-2 rounded-md m-2"
             v-model="password1"
             type="password"
             placeholder="Enter your password..."
@@ -28,7 +31,7 @@
             @focus="playSound('mouse_click.mp3')"
           />
           <input
-            class="border-2 rounded-md m-2"
+            class="dark:bg-gray-700 border-2 rounded-md m-2"
             v-model="password2"
             type="password"
             placeholder="Repeat your password..."
@@ -38,11 +41,11 @@
           <button
             class="m-2"
             @click="savePassword(password1, matchPasswords(password1, password2)), playSound('mouse_click.mp3')"
-          >Log in</button>
+          >Register</button>
         </div>
       </div>
       <div v-else class="note-box grid justify-items-center justify-center mx-10">
-        <label class="font-bold pt-5 font">Notes</label>
+        <label class="dark:text-gray-100 font-bold pt-5 font">Notes</label>
         <br />
         <input
           v-model="title"
@@ -60,7 +63,7 @@
           cols="50"
           @focus="playSound('mouse_click.mp3')"
         ></textarea>
-        <label class="p-2">{{ text.length }} / {{ maxChars }}</label>
+        <label class="dark:text-gray-100 p-2">{{ text.length }} / {{ maxChars }}</label>
         <div class="inline-flex">
           <button
             v-if="text.length <= maxChars"
@@ -94,7 +97,7 @@
             :key="note.title"
             :noteTitle="note.title"
             :noteText="note.text"
-            @isDelete="delNote(index)"
+            @delete="delNote(index)"
           ></NoteDisplay>
         </ul>
       </div>

@@ -11,7 +11,7 @@
       <button
         class="border bg-gray-100 px-6 py-6 shadow-md rounded-r-md hover:opacity-70"
         :class="{ 'rounded-b-none': isVisible }"
-        @click="$emit('isDelete', $event)"
+        @click="$emit('delete', $event)"
       >
         <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" viewBox="0 0 24 24">
           <path
@@ -21,7 +21,7 @@
       </button>
     </div>
 
-    <div v-if="isVisible" class="border px-10 py-6 rounded-b-md">{{ noteText }}</div>
+    <div v-if="isVisible" class="dark:bg-gray-100 border px-10 py-6 rounded-b-md">{{ noteText }}</div>
   </div>
 </template>
 <script setup lang="ts">

@@ -3,48 +3,16 @@
   <main class="dark:bg-gray-900 min-h-screen">
     <div class="grid justify-items-center justify-center mx-10">
       <div v-if="!isLoggedIn" class="justify-center items-center flex password-box h-screen">
-        <div
-          v-if="password"
-          class="dark:bg-gray-800 dark:text-gray-100 inline-flex bg-gray-100 rounded-md m-5"
-        >
-          <label class="m-2">Enter your password to log in</label>
-          <input
-            class="dark:bg-gray-700 border-2 rounded-md m-2"
-            type="password"
-            v-model="password1"
-            @keyup.enter="checkPassword(password1)"
-            @focus="playSound('mouse_click.mp3')"
-          />
-          <button class="m-2" @click="checkPassword(password1), playSound('mouse_click.mp3')">Log in</button>
-        </div>
-        <div
-          v-else
-          class="justify-center items-center inline-flex dark:bg-gray-800 dark:text-gray-100 bg-gray-100 rounded-md"
-        >
-          <label class="m-2">Enter your password to register</label>
-          <input
-            class="dark:bg-gray-700 border-2 rounded-md m-2"
-            v-model="password1"
-            type="password"
-            placeholder="Enter your password..."
-            @keyup.enter="checkPassword(password1)"
-            @focus="playSound('mouse_click.mp3')"
-          />
-          <input
-            class="dark:bg-gray-700 border-2 rounded-md m-2"
-            v-model="password2"
-            type="password"
-            placeholder="Repeat your password..."
-            @keyup.enter="checkPassword(password1)"
-            @focus="playSound('mouse_click.mp3')"
-          />
-          <button
-            class="m-2"
-            @click="savePassword(password1, matchPasswords(password1, password2)), playSound('mouse_click.mp3')"
-          >Register</button>
-        </div>
+        <PasswordManager @logIn="isLoggedIn = $event"></PasswordManager>
       </div>
       <div v-else class="note-box grid justify-items-center justify-center mx-10">
+        <div class="min-h-2 justify-items-end justify-end">
+          <button
+            class="p-2 rounded-md dark:shadow-none shadow-md dark:bg-gray-100 hover:bg-gray-200 active:bg-gray-100"
+            @click="isLoggedIn = false, password1 = ''"
+          >Log out</button>
+        </div>
+
         <label class="dark:text-gray-100 font-bold pt-5 font">Notes</label>
         <br />
         <input
@@ -109,9 +77,13 @@
 import { defineComponent } from '@vue/runtime-core'
 import NoteDisplay from './components/NoteDisplay.vue';
 import { Note } from './Note'
+import PasswordManager from './components/PasswordManager.vue';
+import PasswordManager1 from './components/PasswordManager.vue';
 export default defineComponent({
   components: {
-    NoteDisplay
+    NoteDisplay,
+    PasswordManager,
+    PasswordManager1
   },
   name: "app",
   data() {
@@ -135,42 +107,6 @@ export default defineComponent({
     }
   },
   methods: {
-    matchPasswords(password1: string, password2: string) {
-      if (password1 == password2) {
-        return true
-      }
-      return false
-    },
-    async savePassword(password: string, perrmision: boolean) {
-      if (perrmision) {
-        const msgUint8 = new TextEncoder().encode(password);
-        const hashBuffer = await crypto.subtle.digest('SHA-256', msgUint8)
-        const hashArray = Array.from(new Uint8Array(hashBuffer))
-        const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('')
-        console.log(hashHex)
-        localStorage.setItem('password', hashHex)
-
-        this.isLoggedIn = true
-      }
-
-    },
-    async checkPassword(password: string) {
-
-      const msgUint8 = new TextEncoder().encode(password);
-      const hashBuffer = await crypto.subtle.digest('SHA-256', msgUint8)
-      const hashArray = Array.from(new Uint8Array(hashBuffer))
-      const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('')
-      console.log(hashHex)
-      if (hashHex == localStorage.getItem('password')) {
-        console.log('Matching password!')
-        this.isLoggedIn = true
-      }
-      else {
-        console.log('Wrong password!')
-        this.isLoggedIn = false
-      }
-
-    },
     playSound(sound: string) {
       if (sound) {
         var audio = new Audio(sound);

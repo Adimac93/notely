@@ -1,20 +1,22 @@
 <template>
   <header></header>
   <main class="dark:bg-gray-900 min-h-screen">
-    <div class="min-h-2 flex justify-items-end justify-end">
+    <nav class="flex items-center justify-between flex-wrap dark:bg-gray-800 bg-gray-200 p-2 mb-4">
+      <div class="flex items-center flex-shrink-0 text-gray-800 dark:text-white mr-6">
+        <span class="font-bold text-xl tracking-tight select-none">Notes</span>
+      </div>
+
       <button
         v-if="isLoggedIn"
-        class="p-2 rounded-md dark:shadow-none shadow-md dark:bg-gray-100 hover:bg-gray-200 active:bg-gray-100 justify-end right"
+        class="inline-block dark:hover:text-gray-900 hover:text-white text-sm px-4 py-2 leading-none border rounded-md dark:text-white text-gray-800 dark:border-white border-gray-800 hover:border-transparent dark:hover:bg-white hover:bg-gray-800"
         @click="isLoggedIn = false, password1 = ''"
       >Log out</button>
-    </div>
+    </nav>
     <div class="grid justify-items-center justify-center mx-10">
       <div v-if="!isLoggedIn" class="justify-center items-center flex password-box h-screen">
         <PasswordManager @logIn="isLoggedIn = $event"></PasswordManager>
       </div>
       <div v-else class="note-box grid justify-items-center justify-center mx-10">
-        <label class="dark:text-gray-100 font-bold pt-5 font">Notes</label>
-        <br />
         <input
           v-model="title"
           :maxLength="maxCharsTitle"
@@ -49,16 +51,6 @@
 
         <br />
         <ul class="note-view items-center cursor-pointer">
-          <!-- <li
-            class="note text-center break-words max-w-6xl hover:bg-gray-100 active:bg-gray-200 rounded-md"
-            v-for="(note, index) in notes"
-            :key="note.title"
-            @click="displayNote(index)"
-            @dblclick="delNote(index)"
-          >
-            <a class="font-bold">{{ note.title }}</a>
-            - {{ note.text }}
-          </li>-->
           <NoteDisplay
             v-for="(note, index) in notes"
             :key="note.title"
@@ -77,12 +69,10 @@ import { defineComponent } from '@vue/runtime-core'
 import NoteDisplay from './components/NoteDisplay.vue';
 import { Note } from './Note'
 import PasswordManager from './components/PasswordManager.vue';
-import PasswordManager1 from './components/PasswordManager.vue';
 export default defineComponent({
   components: {
     NoteDisplay,
     PasswordManager,
-    PasswordManager1
   },
   name: "app",
   data() {

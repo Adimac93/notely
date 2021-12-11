@@ -16,7 +16,10 @@
       v-model="sessionHash"
       @keyup.enter="checkPassword(password1)"
     />-->
-    <button class="m-2" @click="checkPassword(password1)">Log in</button>
+    <button
+      class="inline-block dark:hover:text-gray-900 hover:text-white self-center text-sm h-8 px-4 py-2 mx-2 leading-none border rounded-md dark:text-white text-gray-800 dark:border-white border-gray-800 hover:border-transparent dark:hover:bg-white hover:bg-gray-800"
+      @click="checkPassword(password1)"
+    >Log in</button>
   </div>
   <div
     v-else
@@ -37,7 +40,10 @@
       placeholder="Repeat your password..."
       @keyup.enter="checkPassword(password1)"
     />
-    <button class="m-2" @click="savePassword(password1, password2)">Register</button>
+    <button
+      class="inline-block dark:hover:text-gray-900 hover:text-white self-center text-sm h-8 px-4 py-2 mx-2 leading-none border rounded-md dark:text-white text-gray-800 dark:border-white border-gray-800 hover:border-transparent dark:hover:bg-white hover:bg-gray-800"
+      @click="savePassword(password1, password2)"
+    >Register</button>
   </div>
 </template>
 <script setup lang="ts">

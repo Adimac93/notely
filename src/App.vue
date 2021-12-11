@@ -1,22 +1,24 @@
 <template>
   <header></header>
   <main class="dark:bg-gray-900 min-h-screen">
+    <div class="min-h-2 flex justify-items-end justify-end">
+      <button
+        v-if="isLoggedIn"
+        class="p-2 rounded-md dark:shadow-none shadow-md dark:bg-gray-100 hover:bg-gray-200 active:bg-gray-100 justify-end right"
+        @click="isLoggedIn = false, password1 = ''"
+      >Log out</button>
+    </div>
     <div class="grid justify-items-center justify-center mx-10">
       <div v-if="!isLoggedIn" class="justify-center items-center flex password-box h-screen">
         <PasswordManager @logIn="isLoggedIn = $event"></PasswordManager>
       </div>
       <div v-else class="note-box grid justify-items-center justify-center mx-10">
-        <div class="min-h-2 justify-items-end justify-end">
-          <button
-            class="p-2 rounded-md dark:shadow-none shadow-md dark:bg-gray-100 hover:bg-gray-200 active:bg-gray-100"
-            @click="isLoggedIn = false, password1 = ''"
-          >Log out</button>
-        </div>
-
         <label class="dark:text-gray-100 font-bold pt-5 font">Notes</label>
         <br />
         <input
           v-model="title"
+          :maxLength="maxCharsTitle"
+          v-text="(maxCharsTitle - title.length)"
           placeholder="Title..."
           type="text"
           class="note-content p-2 border-2 rounded-md shadow-sm"
@@ -25,22 +27,19 @@
         <br />
         <textarea
           v-model="text"
+          :maxlength="maxCharsText"
+          v-text="(maxCharsText - text.length)"
           placeholder="Place for your note ↴"
           class="p-2 border-2 rounded-md shadow-sm"
           rows="5"
           cols="50"
           @focus="playSound('mouse_click.mp3')"
         ></textarea>
-        <label class="dark:text-gray-100 p-2">{{ text.length }} / {{ maxChars }}</label>
+        <label class="dark:text-gray-100 p-2">{{ text.length }} / {{ maxCharsText }}</label>
         <div class="inline-flex">
           <button
-            v-if="text.length <= maxChars"
             class="note-save shadow-md p-1 w-20 rounded-md bg-gray-100 hover:bg-gray-200 active:bg-gray-100 rounded-r-none"
             @click="saveNote(), playSound('mouse_click.mp3')"
-          >Save</button>
-          <button
-            v-else
-            class="note-save shadow-md p-1 w-20 bg-gray-100 rounded-md opacity-70 rounded-r-none"
           >Save</button>
           <button
             class="note-save shadow-md p-1 w-20 rounded-md bg-gray-100 hover:bg-gray-200 active:bg-gray-100 rounded-l-none"
@@ -93,9 +92,10 @@ export default defineComponent({
       notes: <Note[]>JSON.parse(localStorage.getItem('notes') ?? '[]'),
 
 
-      maxChars: <number>10000,
+      maxCharsText: <number>10000,
       currentChars: <number>0,
 
+      maxCharsTitle: <number>20,
 
       isLoggedIn: <boolean>false,
       isMatching: <boolean>false,
@@ -119,8 +119,8 @@ export default defineComponent({
       if (this.title != '' && this.text != '') {
         this.notes.unshift({
           title: this.title,
-          text: this.text
-
+          text: this.text,
+          iat: new Date().getTime()
         })
         localStorage.setItem("notes", JSON.stringify(this.notes))
       }
